@@ -18,3 +18,6 @@ class Wish(BaseWish):
 class CreateWish(Wish):
     pass
 
+
+class UpdateWish(CreateWish):
+    pass
