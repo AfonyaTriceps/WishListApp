@@ -2,7 +2,7 @@ from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from src.api_v1.wishes.models import WishCard
-from src.api_v1.wishes.schemas import CreateWish
+from src.api_v1.wishes.schemas import CreateWish, UpdateWish
 
 
 async def get_wishes(session: AsyncSession) -> list[WishCard]:
@@ -23,3 +23,16 @@ async def create_wish(session: AsyncSession, create_schema: CreateWish) -> WishC
     await session.refresh(new_wish)
 
     return new_wish
+
+
+async def update_wish(session: AsyncSession, wish: WishCard, wish_update: UpdateWish) -> WishCard:
+    for key, value in wish_update.model_dump().items():
+        setattr(wish, key, value)
+
+    await session.commit()
+    return wish
+
+
+async def delete_wish(session: AsyncSession, wish: WishCard) -> None:
+    await session.delete(wish)
+    await session.commit()
