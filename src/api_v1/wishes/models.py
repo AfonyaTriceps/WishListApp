@@ -1,14 +1,21 @@
+from typing import TYPE_CHECKING, Optional
 from src.api_v1.db import Base
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import String, Integer
-from typing import Optional
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import String, ForeignKey
+
+from src.api_v1.utils.mixins import IdPkMixin
+
+if TYPE_CHECKING:
+    from src.api_v1.users.models import User
 
 
-class WishCard(Base):
+class WishCard(Base, IdPkMixin):
     """Модель карточки желания."""
     name: Mapped[str] = mapped_column(String(100))
     url: Mapped[Optional[str]]
     description: Mapped[Optional[str]]
     price: Mapped[Optional[float]]
-    photo: Mapped[Optional[bytes]]
-    #user_id: Mapped[int] = mapped_column(ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'))
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id', ondelete='CASCADE'))
+    photo: Mapped[Optional[str]]
+    user: Mapped['User'] = relationship('User', back_populates='wishes')
+
