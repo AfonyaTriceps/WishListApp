@@ -1,7 +1,14 @@
+from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pathlib import Path
 
 env_file = f'{Path(__file__).parent.parent.parent}/.env'
+
+
+class AccsessToken(BaseModel):
+    """Класс настроек для работы с токенами"""
+    RESET_PASSWORD_TOKEN_SECRET: str
+    VERIFICATION_TOKEN_SECRET: str
 
 
 class Settings(BaseSettings):
@@ -11,6 +18,7 @@ class Settings(BaseSettings):
     DB_PASSWORD: str
     DB_PORT: str
     DB_HOST: str
+    access_token: AccsessToken
 
     api_v1_prefix: str = '/api/v1'
 
