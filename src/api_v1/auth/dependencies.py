@@ -1,13 +1,16 @@
 from typing import TYPE_CHECKING
 
 from fastapi import Depends
-from fastapi_users.authentication.strategy.db import AccessTokenDatabase, DatabaseStrategy
+
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from src.api_v1.auth.user_manager import UserManager
 from src.api_v1.db.db_helper import async_session
 
 if TYPE_CHECKING:
     from src.api_v1.auth.models import AccessToken
     from src.api_v1.users.models import User
+    from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 
 
 async def get_access_token_db(
@@ -18,3 +21,7 @@ async def get_access_token_db(
 
 async def get_user_db(session: AsyncSession = Depends(async_session)):
     yield User.get_db(session=session)
+
+
+async def get_user_manager(users_db: SQLAlchemyUserDatabase = Depends(get_user_db)):
+    yield UserManager(users_db)
