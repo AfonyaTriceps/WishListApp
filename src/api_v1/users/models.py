@@ -5,13 +5,14 @@ from datetime import datetime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Enum
 from src.api_v1.users.constants import Gender
-from fastapi_users.db import SQLAlchemyBaseUserTable
+from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
 
 from src.api_v1.utils.mixins import IdPkMixin
 
 if TYPE_CHECKING:
     from src.api_v1.wishes.models import WishCard
     from sqlalchemy.ext.asyncio import AsyncSession
+
 
 class User(Base, IdPkMixin, SQLAlchemyBaseUserTable[int]):
     """Модель карточки пользователя."""
