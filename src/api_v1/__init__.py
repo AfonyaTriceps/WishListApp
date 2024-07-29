@@ -1,6 +1,3 @@
-from fastapi import APIRouter
-
-from src.api_v1.wishes.views import wishes_router
-
-router = APIRouter()
-router.include_router(router=wishes_router, prefix='/wishes')
+from src.api_v1.db import Base
+from src.api_v1.wishes.models import WishCard
+from src.api_v1.users.models import User
