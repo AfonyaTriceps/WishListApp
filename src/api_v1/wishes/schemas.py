@@ -8,7 +8,8 @@ class BaseWish(BaseModel):
     url: str
     description: str
     price: float
-    photo: bytes
+    photo: str
+    user_id: int
 
 
 class Wish(BaseWish):

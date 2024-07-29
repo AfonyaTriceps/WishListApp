@@ -1,12 +1,13 @@
-from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.orm import joinedload
+
 from src.api_v1.wishes.models import WishCard
 from src.api_v1.wishes.schemas import CreateWish, UpdateWish
 
 
 async def get_wishes(session: AsyncSession) -> list[WishCard]:
-    wishes_query = await session.execute(select(WishCard).order_by(WishCard.id))
+    wishes_query = await session.execute(select(WishCard).options(joinedload(WishCard.user)).order_by(WishCard.id))
     wishes = wishes_query.scalars().all()
 
     return list(wishes)

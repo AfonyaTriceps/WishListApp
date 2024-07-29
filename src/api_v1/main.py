@@ -1,4 +1,4 @@
-from src.api_v1 import router
+from src import router
 from fastapi import FastAPI
 from src.api_v1.settings import settings
 

@@ -32,6 +32,10 @@ async def create_wish(create_schema: CreateWish, session: AsyncSession = Depends
 @wishes_router.delete('/{wish_id}/', status_code=status.HTTP_204_NO_CONTENT)
 async def delete_wish(wish_id: int, session: AsyncSession = Depends(async_session)):
     wish = await service.get_wish(session=session, wish_id=wish_id)
+    if not wish:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=f'Продукта с id={wish_id} не существует.'
+        )
     await service.delete_wish(session=session, wish=wish)
 
 
