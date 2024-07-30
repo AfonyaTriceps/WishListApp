@@ -15,3 +15,9 @@ auth_router.include_router(
 auth_router.include_router(
     fastapi_users.get_register_router(UserRead, UserCreate),
 )
+
+# /request-verify-token
+# /verify
+auth_router.include_router(
+    fastapi_users.get_verify_router(UserRead),
+)
