@@ -1,11 +1,8 @@
 from fastapi import APIRouter, HTTPException, status, Depends
-from src.api_v1.wishes import service
+from src.api_v1.wishes import service, wishes_router
 from src.api_v1.wishes.schemas import CreateWish, Wish, UpdateWish
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.api_v1.db.db_helper import async_session
-
-
-wishes_router = APIRouter(tags=['Wishes'])
 
 
 @wishes_router.get('/', response_model=list[Wish])
