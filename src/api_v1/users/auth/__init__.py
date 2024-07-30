@@ -8,7 +8,7 @@ from src.api_v1.users.schemas import UserRead, UserCreate, UserUpdate
 # /logout
 auth_router = APIRouter(tags=['Auth'])
 auth_router.include_router(
-    fastapi_users.get_auth_router(auth_backend),
+    fastapi_users.get_auth_router(auth_backend, requires_verification=True),
 )
 
 # /register
