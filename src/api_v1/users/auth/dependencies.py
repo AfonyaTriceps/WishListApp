@@ -23,5 +23,5 @@ async def get_user_db(session: AsyncSession = Depends(async_session)):
     yield User.get_db(session=session)
 
 
-async def get_user_manager(users_db: SQLAlchemyUserDatabase = Depends(get_user_db)):
+async def get_user_manager(users_db: 'SQLAlchemyUserDatabase' = Depends(get_user_db)):
     yield UserManager(users_db)

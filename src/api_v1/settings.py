@@ -5,12 +5,6 @@ from pathlib import Path
 env_file = f'{Path(__file__).parent.parent.parent}/.env'
 
 
-class AccsessToken(BaseModel):
-    """Класс настроек для работы с токенами"""
-    RESET_PASSWORD_TOKEN_SECRET: str
-    VERIFICATION_TOKEN_SECRET: str
-
-
 class Settings(BaseSettings):
     """Класс настроек приложения"""
     DB_NAME: str
@@ -18,9 +12,12 @@ class Settings(BaseSettings):
     DB_PASSWORD: str
     DB_PORT: str
     DB_HOST: str
-    access_token: AccsessToken
+
+    RESET_PASSWORD_TOKEN_SECRET: str
+    VERIFICATION_TOKEN_SECRET: str
 
     api_v1_prefix: str = '/api/v1'
+    auth_prefix: str = f'{api_v1_prefix[1:]}/auth/login'
 
     model_config = SettingsConfigDict(env_file=env_file, env_file_encoding='utf-8', extra='ignore')
 

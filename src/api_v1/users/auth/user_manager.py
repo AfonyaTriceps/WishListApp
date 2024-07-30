@@ -14,8 +14,8 @@ log = logging.getLogger(__name__)
 
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
-    reset_password_token_secret = settings.access_token.RESET_PASSWORD_TOKEN_SECRET
-    verification_token_secret = settings.access_token.VERIFICATION_TOKEN_SECRET
+    reset_password_token_secret = settings.RESET_PASSWORD_TOKEN_SECRET
+    verification_token_secret = settings.VERIFICATION_TOKEN_SECRET
 
     async def on_after_register(self, user: User, request: Optional['Request'] = None):
         log.warning('Пользователь %r зарегистрирован.', user.id)
