@@ -6,10 +6,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api_v1.users.auth.user_manager import UserManager
 from src.api_v1.db.db_helper import async_session
+from src.api_v1.users.models import User
+from src.api_v1.users.auth.models import AccessToken
 
 if TYPE_CHECKING:
-    from src.api_v1.users.auth.models import AccessToken
-    from src.api_v1.users.models import User
     from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 
 
