@@ -1,7 +1,9 @@
 from collections.abc import AsyncGenerator
 
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+from sqlalchemy.ext.asyncio import (AsyncSession, async_sessionmaker,
+                                    create_async_engine)
+
 from src.api_v1.settings import settings
 
 
@@ -20,7 +22,7 @@ class DatabaseHelper:
 
     async def session_dependency(self) -> AsyncGenerator[AsyncSession, None]:
         """
-        Генератор сессий
+        Генератор сессий.
 
         yield: сессия
 

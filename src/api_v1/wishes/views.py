@@ -1,13 +1,13 @@
 from typing import TYPE_CHECKING
 
-from fastapi import HTTPException, status, Depends
+from fastapi import Depends, HTTPException, status
 from fastapi.responses import StreamingResponse
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.api_v1.db.db_helper import async_session
 from src.api_v1.users.auth.routers import current_user
 from src.api_v1.wishes import service, wishes_router
-from src.api_v1.wishes.schemas import CreateWish, Wish, UpdateWish
-from sqlalchemy.ext.asyncio import AsyncSession
-from src.api_v1.db.db_helper import async_session
+from src.api_v1.wishes.schemas import CreateWish, UpdateWish, Wish
 from src.api_v1.wishes.utils import generate_csv
 
 if TYPE_CHECKING:
@@ -16,11 +16,13 @@ if TYPE_CHECKING:
 
 @wishes_router.get('/', response_model=list[Wish])
 async def get_wishes(session: AsyncSession = Depends(async_session), user: 'User' = Depends(current_user)):
+    """Получение списка желаний."""
     return await service.get_wishes(session=session, user=user)
 
 
 @wishes_router.get('/{wish_id}/', response_model=Wish)
 async def get_wish(wish_id: int, session: AsyncSession = Depends(async_session), user: 'User' = Depends(current_user)):
+    """Получение желания по id."""
     wish = await service.get_wish(session=session, wish_id=wish_id, user=user)
     if wish:
         return wish
@@ -33,12 +35,14 @@ async def get_wish(wish_id: int, session: AsyncSession = Depends(async_session),
 @wishes_router.post('/', response_model=Wish)
 async def create_wish(create_schema: CreateWish, session: AsyncSession = Depends(async_session), user: 'User' =
                       Depends(current_user)):
+    """Создание желания."""
     return await service.create_wish(session=session, create_schema=create_schema, user=user)
 
 
 @wishes_router.delete('/{wish_id}/', status_code=status.HTTP_204_NO_CONTENT)
 async def delete_wish(
-        wish_id: int, session: AsyncSession = Depends(async_session), user: 'User' = Depends(current_user)):
+        wish_id: int, session: AsyncSession = Depends(async_session), user: 'User' = Depends(current_user)) -> None:
+    """Удаление желания."""
     wish = await service.get_wish(session=session, wish_id=wish_id, user=user)
     if not wish:
         raise HTTPException(
@@ -50,6 +54,7 @@ async def delete_wish(
 @wishes_router.put('/{wish_id}/', response_model=UpdateWish)
 async def update_wish(wish_id: int, wish_update: UpdateWish, session: AsyncSession = Depends(async_session),
                       user: 'User' = Depends(current_user)):
+    """Обновление желания."""
     wish = await service.get_wish(session=session, wish_id=wish_id, user=user)
     if not wish:
         raise HTTPException(
@@ -60,7 +65,9 @@ async def update_wish(wish_id: int, wish_update: UpdateWish, session: AsyncSessi
 
 
 @wishes_router.get('/{wish_id}/download_wishes')
-async def get_wishes_in_pdf(session: AsyncSession = Depends(async_session), user: 'User' = Depends(current_user)):
+async def get_wishes_in_pdf(session: AsyncSession = Depends(async_session), user: 'User' = Depends(current_user)) -> (
+        StreamingResponse):
+    """Загрузка желаний в csv."""
     wishes = await get_wishes(session=session, user=user)
     if not wishes:
         raise HTTPException(status_code=404, detail='Желаний не найдено')

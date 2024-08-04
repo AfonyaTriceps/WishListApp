@@ -1,6 +1,4 @@
-from fastapi_users.authentication import AuthenticationBackend
-
-from fastapi_users.authentication import BearerTransport
+from fastapi_users.authentication import AuthenticationBackend, BearerTransport
 
 from src.api_v1.settings import settings
 from src.api_v1.users.auth.strategy import get_database_strategy

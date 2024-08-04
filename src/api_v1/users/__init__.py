@@ -1,8 +1,7 @@
 from fastapi import APIRouter
 
-from src.api_v1.users.auth.backend import auth_backend
 from src.api_v1.users.auth.routers import fastapi_users
-from src.api_v1.users.schemas import UserRead, UserCreate, UserUpdate
+from src.api_v1.users.schemas import UserRead, UserUpdate
 
 # /login
 # /logout
