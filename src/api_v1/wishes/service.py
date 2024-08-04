@@ -1,24 +1,31 @@
+from typing import TYPE_CHECKING
+
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from sqlalchemy.orm import joinedload
 
 from src.api_v1.wishes.models import WishCard
 from src.api_v1.wishes.schemas import CreateWish, UpdateWish
+if TYPE_CHECKING:
+    from src.api_v1.users.models import User
 
 
-async def get_wishes(session: AsyncSession) -> list[WishCard]:
-    wishes_query = await session.execute(select(WishCard).options(joinedload(WishCard.user)).order_by(WishCard.id))
+async def get_wishes(session: AsyncSession, user: 'User') -> list[WishCard]:
+    wishes_query = await session.execute(select(WishCard).where(WishCard.user_id==user.id).order_by(WishCard.id))
     wishes = wishes_query.scalars().all()
 
     return list(wishes)
 
 
-async def get_wish(session: AsyncSession, wish_id: int) -> WishCard | None:
-    return await session.get(WishCard, wish_id)
+async def get_wish(session: AsyncSession, wish_id: int, user: 'User') -> WishCard | None:
+    wish_query = await session.execute(select(WishCard).where(WishCard.user_id==user.id, WishCard.id==wish_id))
+    wish = wish_query.scalar_one_or_none()
+    return wish
 
 
-async def create_wish(session: AsyncSession, create_schema: CreateWish) -> WishCard:
+async def create_wish(session: AsyncSession, create_schema: CreateWish, user: 'User') -> WishCard:
     new_wish = WishCard(**create_schema.model_dump())
+    new_wish.user_id = user.id
+    new_wish.url = str(new_wish.url) if new_wish.url else None
     session.add(new_wish)
     await session.commit()
     await session.refresh(new_wish)
