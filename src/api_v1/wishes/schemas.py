@@ -1,24 +1,22 @@
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, HttpUrl
 
 
 class BaseWish(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     name: str
-    url: Optional[str]
+    url: Optional[HttpUrl]
     description: Optional[str]
     price: Optional[float]
-    photo: Optional[str]
-    user_id: int
 
 
 class Wish(BaseWish):
     id: int
 
 
-class CreateWish(Wish):
+class CreateWish(BaseWish):
     pass
 
 

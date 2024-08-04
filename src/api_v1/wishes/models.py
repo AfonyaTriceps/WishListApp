@@ -16,6 +16,6 @@ class WishCard(Base, IdPkMixin):
     description: Mapped[Optional[str]]
     price: Mapped[Optional[float]]
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey('users.id', ondelete='CASCADE'))
-    photo: Mapped[Optional[str]]
+    #photo: Mapped[Optional[str]]
     user: Mapped['User'] = relationship('User', back_populates='wishes')
 
